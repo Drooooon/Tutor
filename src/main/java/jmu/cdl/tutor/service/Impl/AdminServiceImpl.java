@@ -4,6 +4,7 @@ import jmu.cdl.tutor.dao.StuSubjectDao;
 import jmu.cdl.tutor.dao.StudentDao;
 import jmu.cdl.tutor.dao.SubjectDao;
 import jmu.cdl.tutor.dao.TeacherDao;
+import jmu.cdl.tutor.pojo.DTO.IdAndStatusDto;
 import jmu.cdl.tutor.pojo.DTO.StatusDto;
 import jmu.cdl.tutor.pojo.DTO.StuSubjectDto;
 import jmu.cdl.tutor.pojo.Student;
@@ -37,8 +38,8 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public void processTeacher(int id, String status) {
-        teacherDao.updateStatusById(id, status);
+    public void processTeacher(IdAndStatusDto idAndStatusDto) {
+        teacherDao.updateStatusById(idAndStatusDto.getId(), idAndStatusDto.getStatus());
     }
 
     @Override

@@ -33,8 +33,8 @@ public class AdminController {
 
 
     @PutMapping("processTeacher")
-    public ResponseMessage<String> processTeacher(@Valid @RequestBody IdDto idDto, @Valid @RequestBody StatusDto statusDto) {
-        adminService.processTeacher(idDto.getId(), statusDto.getStatus());
+    public ResponseMessage<String> processTeacher(@Valid @RequestBody IdAndStatusDto idDto) {
+        adminService.processTeacher(idDto);
         return ResponseMessage.success("处理完成");
     }
 
