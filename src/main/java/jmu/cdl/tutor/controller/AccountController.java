@@ -81,7 +81,7 @@ public class AccountController {
     @PostMapping("requestStatus")
     public ResponseMessage<String> requestStatus(@Valid @RequestBody IdDto idDto) {
         String status = accountService.getStatus(idDto);
-        System.out.println("cdl66666");
+        System.out.println("cdl66668");
 
         return ResponseMessage.success(status);
     }
