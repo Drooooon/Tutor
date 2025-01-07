@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
+import javax.crypto.spec.PSource;
+
 /**
  * AccountController 处理与用户账户相关的请求，包括注册、登录、修改密码和注销账户。
  */
@@ -79,6 +81,8 @@ public class AccountController {
     @PostMapping("requestStatus")
     public ResponseMessage<String> requestStatus(@Valid @RequestBody IdDto idDto) {
         String status = accountService.getStatus(idDto);
+        System.out.println("cdl666");
+
         return ResponseMessage.success(status);
     }
 }
