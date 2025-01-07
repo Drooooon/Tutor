@@ -128,8 +128,10 @@ public class AccountServiceImpl implements AccountService {
                 studentDao.deleteStudentById(id);
                 customerDao.deleteCustomerById(id);
             }
-            accountDao.deleteAccount(id);
+//            accountDao.deleteAccount(id);
+            accountDao.deleteById(id);
             return true;
+
         }
         return false;
     }
