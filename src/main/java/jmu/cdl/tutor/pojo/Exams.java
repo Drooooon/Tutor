@@ -1,11 +1,10 @@
 package jmu.cdl.tutor.pojo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @Table(name = "tb_exams")
@@ -13,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Exams {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exam_id")
     private int examId;         // 考试ID
 
@@ -26,7 +26,7 @@ public class Exams {
     private String grade;          // 年级
 
     @Column(name = "exam_date")
-    private String examDate;    // 考试日期
+    private Date examDate;    // 考试日期
 
     @Column(name = "average_score")
     private float averageScore; // 平均分
