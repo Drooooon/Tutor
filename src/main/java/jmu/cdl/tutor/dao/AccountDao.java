@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface AccountDao extends CrudRepository<Account, Integer> {
 
     /**
+     * djh
      * 根据用户ID删除账户
      * 
      * @param id 用户ID
