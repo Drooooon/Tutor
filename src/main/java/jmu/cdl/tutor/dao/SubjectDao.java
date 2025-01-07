@@ -1,9 +1,12 @@
 package jmu.cdl.tutor.dao;
 
+import jakarta.validation.constraints.NotNull;
 import jmu.cdl.tutor.pojo.Subject;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,4 +42,12 @@ public interface SubjectDao extends CrudRepository<Subject, Integer> {
      */
     @Query("SELECT s.subjectName FROM Subject s WHERE s.subjectId IN :ids")
     List<String> getSubjectNamesByIds(List<Integer> ids);
+
+    @Query("SELECT s FROM Subject s")
+    List<Subject> findAllSubjects();
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Subject s SET s.price = :price WHERE s.subjectId = :id")
+    void updatePriceById(int id, double price);
 }

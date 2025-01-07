@@ -14,7 +14,8 @@ public class Exams {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exam_id")
-    private int examId;         // 考试ID
+    private int examId; // 考试ID
+
 
     @Column(name = "subject_id")
     private int subjectId;      // 科目ID
