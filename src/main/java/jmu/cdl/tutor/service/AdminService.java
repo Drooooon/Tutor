@@ -3,8 +3,10 @@ package jmu.cdl.tutor.service;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jmu.cdl.tutor.pojo.DTO.IdAndStatusDto;
+import jmu.cdl.tutor.pojo.DTO.PriceDto;
 import jmu.cdl.tutor.pojo.DTO.StatusDto;
 import jmu.cdl.tutor.pojo.DTO.StuSubjectDto;
+import jmu.cdl.tutor.pojo.Subject;
 import jmu.cdl.tutor.pojo.Teacher;
 
 import java.util.List;
@@ -20,4 +22,8 @@ public interface AdminService {
     List<Integer> getStudentIds();
 
     List<StuSubjectDto> getStudents(@Valid StatusDto statusDto);
+
+    List<Subject> getSubjectInfo();
+
+    String updatePrice(@Valid PriceDto priceDto);
 }
