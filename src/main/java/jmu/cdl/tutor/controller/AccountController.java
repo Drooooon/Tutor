@@ -6,6 +6,7 @@ import jmu.cdl.tutor.pojo.DTO.*;
 import jmu.cdl.tutor.pojo.ResponseMessage;
 import jmu.cdl.tutor.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -73,5 +74,11 @@ public class AccountController {
             return ResponseMessage.success("注销成功，感谢您的陪伴");
         }
         return ResponseMessage.failed("账号密码错误，请重新修改");
+    }
+
+    @PostMapping("requestStatus")
+    public ResponseMessage<String> requestStatus(@Valid @RequestBody IdDto idDto) {
+        String status = accountService.getStatus(idDto);
+        return ResponseMessage.success(status);
     }
 }
