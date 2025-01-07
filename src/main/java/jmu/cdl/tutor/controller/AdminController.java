@@ -6,6 +6,7 @@ import jmu.cdl.tutor.dao.StudentDao;
 import jmu.cdl.tutor.pojo.DTO.*;
 import jmu.cdl.tutor.pojo.ResponseMessage;
 import jmu.cdl.tutor.pojo.Student;
+import jmu.cdl.tutor.pojo.Subject;
 import jmu.cdl.tutor.pojo.Teacher;
 import jmu.cdl.tutor.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,18 @@ public class AdminController {
 
     }
 
+    @GetMapping("getSubjectInfo")
+    public ResponseMessage<List<Subject>> getSubjectInfo() {
+        List<Subject> subjects = adminService.getSubjectInfo();
+        return ResponseMessage.success(subjects);
+    }
 
 
+    @PutMapping("updateSubjectPrice")
+    public ResponseMessage<String> updateSubjectPrice(@Valid @RequestBody PriceDto priceDto) {
+        String message = adminService.updatePrice(priceDto);
+        return ResponseMessage.success(message);
+    }
 
+    
 }

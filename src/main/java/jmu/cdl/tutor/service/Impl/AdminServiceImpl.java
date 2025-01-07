@@ -5,9 +5,11 @@ import jmu.cdl.tutor.dao.StudentDao;
 import jmu.cdl.tutor.dao.SubjectDao;
 import jmu.cdl.tutor.dao.TeacherDao;
 import jmu.cdl.tutor.pojo.DTO.IdAndStatusDto;
+import jmu.cdl.tutor.pojo.DTO.PriceDto;
 import jmu.cdl.tutor.pojo.DTO.StatusDto;
 import jmu.cdl.tutor.pojo.DTO.StuSubjectDto;
 import jmu.cdl.tutor.pojo.Student;
+import jmu.cdl.tutor.pojo.Subject;
 import jmu.cdl.tutor.pojo.Teacher;
 import jmu.cdl.tutor.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +68,18 @@ public class AdminServiceImpl implements AdminService {
             }
         }
         return result;
+    }
+
+    @Override
+    public List<Subject> getSubjectInfo() {
+        return subjectDao.findAllSubjects();
+    }
+
+    @Override
+    public String updatePrice(PriceDto priceDto) {
+        int id = subjectDao.getIdBySubjectName(priceDto.getName());
+        subjectDao.updatePriceById(id, priceDto.getPrice());
+        return "更新成功价格为"+priceDto.getPrice();
     }
 
 
