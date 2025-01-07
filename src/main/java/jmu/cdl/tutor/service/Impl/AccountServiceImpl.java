@@ -5,6 +5,7 @@ import jmu.cdl.tutor.dao.*;
 import jmu.cdl.tutor.pojo.Account;
 import jmu.cdl.tutor.pojo.Customer;
 import jmu.cdl.tutor.pojo.DTO.AccountDto;
+import jmu.cdl.tutor.pojo.DTO.IdDto;
 import jmu.cdl.tutor.pojo.DTO.LoginAndDeleteDto;
 import jmu.cdl.tutor.pojo.DTO.UpdatePasswordDto;
 import jmu.cdl.tutor.pojo.Teacher;
@@ -22,22 +23,20 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
-    private AccountDao accountdao;
-
-    @Autowired
-    private CustomerDao customerdao;
-
-    @Autowired
-    private TeacherDao teacherdao;
-
-    @Autowired
     private AccountDao accountDao;
+
+    @Autowired
+    private CustomerDao customerDao;
+
+    @Autowired
+    private TeacherDao teacherDao;
 
     @Autowired
     private StudentDao studentDao;
 
     @Autowired
     private StuSubjectDao stuSubjectDao;
+
 
     /**
      * 注册新用户
@@ -54,13 +53,13 @@ public class AccountServiceImpl implements AccountService {
             teacher.setName(accountDto.getName());
             teacher.setEmail(accountDto.getEmail());
             teacher.setStatus("PENDING");
-            teacherdao.save(teacher);
+            teacherDao.save(teacher);
             id = teacher.getId();
         } else if (accountDto.getUserType().equals("customer")) {
             Customer customer = new Customer();
             customer.setName(accountDto.getName());
             customer.setEmail(accountDto.getEmail());
-            customerdao.save(customer);
+            customerDao.save(customer);
             id = customer.getId();
         }
 
@@ -69,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
         account.setId(id);
         account.setPassword(accountDto.getPassword());
         account.setUserType(accountDto.getUserType());
-        accountdao.save(account);
+        accountDao.save(account);
         return account;
     }
 
@@ -81,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public Account login(@Valid LoginAndDeleteDto loginAndDeleteDto) {
-        Account account = accountdao.findById(loginAndDeleteDto.getId()).orElse(null);
+        Account account = accountDao.findById(loginAndDeleteDto.getId()).orElse(null);
         if (account == null) {
             return null;
         } else {
@@ -101,7 +100,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public boolean updatePassword(UpdatePasswordDto updatePasswordDto) {
-        String oldPassword = accountdao.getPasswordById(updatePasswordDto.getId());
+        String oldPassword = accountDao.getPasswordById(updatePasswordDto.getId());
         if (updatePasswordDto.getOldPassword().equals(oldPassword)) {
             accountDao.updatePasswordById(updatePasswordDto.getId(), updatePasswordDto.getNewPassword());
             return true;
@@ -122,16 +121,21 @@ public class AccountServiceImpl implements AccountService {
         int id = loginAndDeleteDto.getId();
         if (password.equals(accountDao.getPasswordById(id))) {
             if (accountDao.getUserTypeById(id).equals("teacher")) {
-                teacherdao.deleteTeacherById(id);
+                teacherDao.deleteTeacherById(id);
             } else {
                 List<Integer> ids = studentDao.getStudentsIdByCustomerId(id);
                 stuSubjectDao.deleteStuSubjectById(ids);
                 studentDao.deleteStudentById(id);
-                customerdao.deleteCustomerById(id);
+                customerDao.deleteCustomerById(id);
             }
             accountDao.deleteAccount(id);
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String getStatus(IdDto idDto) {
+        return teacherDao.getStatusById(idDto.getId());
     }
 }

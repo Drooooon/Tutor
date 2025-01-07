@@ -35,4 +35,7 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
     @Transactional
     @Query("UPDATE Teacher t SET t.status = :status WHERE t.id = :id")
     void updateStatusById(int id, String status);
+
+    @Query("SELECT t.status FROM Teacher t WHERE t.id = :id")
+    String getStatusById(int id);
 }

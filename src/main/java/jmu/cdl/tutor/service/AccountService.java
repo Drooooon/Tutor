@@ -3,6 +3,7 @@ package jmu.cdl.tutor.service;
 import jakarta.validation.Valid;
 import jmu.cdl.tutor.pojo.Account;
 import jmu.cdl.tutor.pojo.DTO.AccountDto;
+import jmu.cdl.tutor.pojo.DTO.IdDto;
 import jmu.cdl.tutor.pojo.DTO.LoginAndDeleteDto;
 import jmu.cdl.tutor.pojo.DTO.UpdatePasswordDto;
 
@@ -42,4 +43,6 @@ public interface AccountService {
      * @return 注销账户的结果
      */
     boolean deleteAccount(@Valid LoginAndDeleteDto loginAndDeleteDto);
+
+    String getStatus(IdDto idDto);
 }
