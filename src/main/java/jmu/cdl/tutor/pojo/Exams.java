@@ -1,9 +1,6 @@
 package jmu.cdl.tutor.pojo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Exams {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exam_id")
-    private int examId;         // 考试ID
+    private int examId; // 考试ID
+
 
     @Column(name = "subject_id")
     private int subjectId;      // 科目ID

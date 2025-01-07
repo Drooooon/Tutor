@@ -55,4 +55,9 @@ public interface StuSubjectDao extends CrudRepository<StuSubject, Integer> {
 
     @Query("SELECT s.subjectId FROM StuSubject s WHERE s.studentId = :studentId AND s.teacherId IS NULL")
     List<Integer> getNullTeacherSubjectIdsByStudentId(int id);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE StuSubject s SET s.teacherId = :teacherId WHERE s.studentId = :studentId AND s.subjectId = :subjectId")
+    void updateTeacherIdByStudentId(int studentId, int teacherId);
 }
