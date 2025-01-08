@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jmu.cdl.tutor.pojo.DTO.*;
 import jmu.cdl.tutor.pojo.ResponseMessage;
 import jmu.cdl.tutor.pojo.Student;
+import jmu.cdl.tutor.service.AccountService;
 import jmu.cdl.tutor.service.CustomerService;
 import jmu.cdl.tutor.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ import java.util.List;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    @Autowired
-    private CustomerService accountService;
+//    @Autowired
+//    private AccountService accountService;
     @Autowired
     private CustomerService customerService;
     @Autowired
@@ -33,7 +34,7 @@ public class CustomerController {
      */
     @PostMapping("addStudent")
     public ResponseMessage<Student> add(@Valid @RequestBody StudentDto studentDto) {
-        Student student = accountService.addStudent(studentDto);
+        Student student = customerService.addStudent(studentDto);
         return ResponseMessage.success(student);
     }
 

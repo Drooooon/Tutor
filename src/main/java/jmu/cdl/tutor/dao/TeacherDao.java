@@ -1,5 +1,8 @@
 package jmu.cdl.tutor.dao;
 
+import jmu.cdl.tutor.pojo.DTO.ExamDetailDto;
+import jmu.cdl.tutor.pojo.DTO.ExamDto;
+import jmu.cdl.tutor.pojo.DTO.ExamWithDetailsDto;
 import jmu.cdl.tutor.pojo.Teacher;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +15,7 @@ import java.util.List;
 /**
  * TeacherDao 接口用于定义对 Teacher 实体的数据库操作，包括删除教师等操作。
  */
-@Repository("teacherDao")
+@Repository("TeacherDao")
 public interface TeacherDao extends CrudRepository<Teacher, Integer> {
 
     /**
@@ -45,4 +48,38 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
             "JOIN Subject s ON ti.subjectId = s.subjectId " +
             "WHERE ti.teacherId = :teacherId")
     List<Object> getAllSubject(int teacherId);
+
+
+    @Query("SELECT new jmu.cdl.tutor.pojo.DTO.ExamWithDetailsDto(e.examId, e.examName, e.examDate,e.grade) " +
+            "FROM Exams e " +
+            "WHERE e.teacherId = :teacherId")
+    List<ExamWithDetailsDto> findExamsByTeacherId(int teacherId);
+
+    @Query("SELECT " +
+            "    new jmu.cdl.tutor.pojo.DTO.ExamDetailDto(" +
+            "        s.id, " + 
+            "        s.name, " +
+            "        ed.score) " +
+            "FROM Exams e " +
+            "LEFT JOIN ExamDetail ed ON e.examId = ed.examId " +
+            "LEFT JOIN Student s ON s.id = ed.stuId " +
+            "WHERE e.examId = :examId")
+    List<ExamDetailDto> getExamDetails(int examId);
+
+    @Modifying
+    @Transactional
+    @Query("UPDATE ExamDetail SET score = :score WHERE stuId = :stuId")
+    void scoreStudent(int stuId, float score);
+
+    @Query("SELECT new jmu.cdl.tutor.pojo.DTO.TeachStudent(s.name, s.id, s.grade) " +
+            "FROM StuSubject ss " +
+            "JOIN Student s ON ss.studentId = s.id " +
+            "WHERE ss.teacherId = :teacherId")
+    List<Object> getAllStudents(int teacherId);
+
+    @Query("SELECT s.subjectName " +
+            "FROM StuSubject ss " +
+            "JOIN Subject s ON ss.subjectId = s.subjectId " +
+            "WHERE ss.studentId = :stuId")
+    List<String> getSubjectByStuId(int stuId);
 }
