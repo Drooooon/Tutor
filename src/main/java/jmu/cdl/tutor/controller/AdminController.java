@@ -10,6 +10,7 @@ import jmu.cdl.tutor.pojo.Subject;
 import jmu.cdl.tutor.pojo.Teacher;
 import jmu.cdl.tutor.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,8 +26,6 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @Autowired
-    private StudentDao studentDao;
 
     /**
      * 根据教师状态获取教师列表
@@ -35,9 +34,9 @@ public class AdminController {
      * @return 教师列表
      */
     @PostMapping("getTeachersByStatus")
-    public ResponseMessage<List<Teacher>> getTeachers(@Valid @RequestBody StatusDto statusDto) {
+    public ResponseMessage<Page<Teacher>> getTeachers(@Valid @RequestBody StatusDto statusDto) {
         List<Integer> ids = adminService.getTeacherIdsByStatus(statusDto.getStatus());
-        List<Teacher> teachers = adminService.getTeachersByIds(ids);
+        Page<Teacher> teachers = adminService.getTeachersByIds(ids, statusDto.getPage(), statusDto.getSize());
         return ResponseMessage.success(teachers);
     }
 
@@ -56,12 +55,12 @@ public class AdminController {
     /**
      * 获取学生列表
      *
-     * @param statusDto 包含学生状态的 DTO 对象
+     * @param pageDto 包含学生状态的 DTO 对象
      * @return 学生列表
      */
     @PostMapping("getStudents")
-    public ResponseMessage<List<StuSubjectDto>> getStudents(@Valid @RequestBody StatusDto statusDto) {
-        List<StuSubjectDto> results = adminService.getStudents(statusDto);
+    public ResponseMessage<List<StuSubjectDto>> getStudents(@Valid @RequestBody PageDto pageDto) {
+        List<StuSubjectDto> results = adminService.getStudents(pageDto);
         if (results.isEmpty()) {
             return ResponseMessage.failed(results);
         }
