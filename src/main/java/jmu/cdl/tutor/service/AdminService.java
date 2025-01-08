@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jmu.cdl.tutor.pojo.DTO.*;
 import jmu.cdl.tutor.pojo.Subject;
 import jmu.cdl.tutor.pojo.Teacher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,7 +27,8 @@ public interface AdminService {
      * @param ids 教师ID列表
      * @return 教师信息列表
      */
-    List<Teacher> getTeachersByIds(List<Integer> ids);
+    Page<Teacher> getTeachersByIds(List<Integer> ids, int page, int size);
+
 
     /**
      * 处理教师申请，更新教师状态
@@ -39,12 +42,13 @@ public interface AdminService {
      */
     List<Integer> getStudentIds();
 
+
     /**
      * 根据学生状态获取学生信息
-     * @param statusDto 包含学生状态的 DTO 对象
+     * @param pageDto 包含学生状态的 DTO 对象
      * @return 学生信息列表
      */
-    List<StuSubjectDto> getStudents(@Valid StatusDto statusDto);
+    List<StuSubjectDto> getStudents(@Valid PageDto pageDto);
 
     /**
      * 获取所有科目信息
@@ -69,4 +73,6 @@ public interface AdminService {
     void fastAssign();
 
     void autoAssign(int tableId);
+
+    Page<Integer> getStudentIdPages(Pageable pageable);
 }

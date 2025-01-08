@@ -8,6 +8,9 @@ import jmu.cdl.tutor.pojo.Subject;
 import jmu.cdl.tutor.pojo.Teacher;
 import jmu.cdl.tutor.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -49,8 +52,9 @@ public class AdminServiceImpl implements AdminService {
      * @return 教师信息列表
      */
     @Override
-    public List<Teacher> getTeachersByIds(List<Integer> ids) {
-        return teacherDao.getTeachersByIds(ids);
+    public Page<Teacher> getTeachersByIds(List<Integer> ids, int page, int size) {
+        Pageable pageable = PageRequest.of(page-1, size);
+        return teacherDao.getTeachersByIds(ids, pageable);
     }
 
     /**
@@ -62,23 +66,29 @@ public class AdminServiceImpl implements AdminService {
         teacherDao.updateStatusById(idAndStatusDto.getId(), idAndStatusDto.getStatus());
     }
 
-    /**
-     * 获取所有学生ID
-     * @return 学生ID列表
-     */
     @Override
     public List<Integer> getStudentIds() {
         return stuSubjectDao.getStudentIds();
     }
 
     /**
+     * 获取所有学生ID
+     * @return 学生ID列表
+     */
+    @Override
+    public Page<Integer> getStudentIdPages(Pageable pageable) {
+        return stuSubjectDao.getStudentIdPages(pageable);
+    }
+
+    /**
      * 根据学生状态获取学生信息
-     * @param statusDto 包含学生状态的 DTO 对象
+     * @param pageDto 包含学生状态的 DTO 对象
      * @return 学生信息列表
      */
     @Override
-    public List<StuSubjectDto> getStudents(StatusDto statusDto) {
-        List<Integer> ids = getStudentIds();
+    public List<StuSubjectDto> getStudents(PageDto pageDto) {
+        Pageable pageable = PageRequest.of(pageDto.getPage()-1, pageDto.getSize());
+        Page<Integer> ids = getStudentIdPages(pageable);
         List<StuSubjectDto> result = new ArrayList<>();
         for (int id : ids) {
             Optional<Student> student = studentDao.findById(id);
@@ -148,4 +158,6 @@ public class AdminServiceImpl implements AdminService {
         int teacherId = stuSubjectDao.getTeacherIdWithMinCount(teacherIds);
         stuSubjectDao.updateTeacherIdByStudentIdAndSubjectId(stuSubject.getStudentId(), teacherId, subjectId);
     }
+
+
 }

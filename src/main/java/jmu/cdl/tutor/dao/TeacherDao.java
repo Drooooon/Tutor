@@ -1,6 +1,8 @@
 package jmu.cdl.tutor.dao;
 
 import jmu.cdl.tutor.pojo.Teacher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,7 +30,7 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
     List<Integer> getIdsByStatus(String status);
 
     @Query("SELECT t FROM Teacher t WHERE t.id IN :ids")
-    List<Teacher> getTeachersByIds(List<Integer> ids);
+    Page<Teacher> getTeachersByIds(List<Integer> ids, Pageable pageable);
 
 
     @Modifying

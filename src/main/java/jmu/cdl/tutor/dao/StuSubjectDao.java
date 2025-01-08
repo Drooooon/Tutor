@@ -3,6 +3,8 @@ package jmu.cdl.tutor.dao;
 import jmu.cdl.tutor.pojo.StuSubject;
 import jmu.cdl.tutor.pojo.Student;
 import jmu.cdl.tutor.pojo.Teacher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -51,10 +53,13 @@ public interface StuSubjectDao extends CrudRepository<StuSubject, Integer> {
      * @return 学生列表
      */
     @Query("SELECT s.studentId FROM StuSubject s WHERE s.teacherId is null")
+    Page<Integer> getStudentIdPages(Pageable pageable);
+
+    @Query("SELECT s.studentId FROM StuSubject s WHERE s.teacherId is null")
     List<Integer> getStudentIds();
 
 
-    @Query("SELECT s.subjectId FROM StuSubject s WHERE s.studentId = :studentId AND s.teacherId IS NULL")
+    @Query("SELECT s.subjectId FROM StuSubject s WHERE s.studentId = :id AND s.teacherId IS NULL")
     List<Integer> getNullTeacherSubjectIdsByStudentId(int id);
 
     @Transactional
