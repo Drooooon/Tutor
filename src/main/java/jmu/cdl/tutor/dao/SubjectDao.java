@@ -2,6 +2,8 @@ package jmu.cdl.tutor.dao;
 
 import jakarta.validation.constraints.NotNull;
 import jmu.cdl.tutor.pojo.Subject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -50,4 +52,7 @@ public interface SubjectDao extends CrudRepository<Subject, Integer> {
     @Modifying
     @Query("UPDATE Subject s SET s.price = :price WHERE s.subjectId = :id")
     void updatePriceById(int id, double price);
+
+    @Query("SELECT s FROM Subject s")
+    Page<Subject> findAllSubjectPages(Pageable pageable);
 }

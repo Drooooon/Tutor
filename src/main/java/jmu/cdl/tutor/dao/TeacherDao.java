@@ -40,4 +40,7 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
 
     @Query("SELECT t.status FROM Teacher t WHERE t.id = :id")
     String getStatusById(int id);
+
+    @Query("SELECT t.name FROM Teacher t WHERE t.id = :teacherId")
+    String getNameById(int teacherId);
 }

@@ -9,6 +9,7 @@ import jmu.cdl.tutor.pojo.Teacher;
 import jmu.cdl.tutor.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -80,31 +81,49 @@ public class AdminServiceImpl implements AdminService {
         return stuSubjectDao.getStudentIdPages(pageable);
     }
 
+    @Override
+    public List<TeacherInfoDto> getTeacherBySubjectAndGrade(SubjectAndGradeDto subjectAndGradeDto) {
+        String grade = subjectAndGradeDto.getGrade();
+        String subject = subjectAndGradeDto.getSubject();
+        int subjectId = subjectDao.getIdBySubjectName(subject);
+        List<Integer> teacherIds = teachInfoDao.getTeacherIdByGradeAndSubjectId(grade, subjectId);
+        List<TeacherInfoDto> result = new ArrayList<>();
+        for(int teacherId:teacherIds){
+            String name = teacherDao.getNameById(teacherId);
+            TeacherInfoDto teacherInfoDto = new TeacherInfoDto();
+            teacherInfoDto.setTeacherId(teacherId);
+            teacherInfoDto.setTeacherName(name);
+            result.add(teacherInfoDto);
+        }
+        return result;
+    }
+
     /**
      * 根据学生状态获取学生信息
      * @param pageDto 包含学生状态的 DTO 对象
      * @return 学生信息列表
      */
     @Override
-    public List<StuSubjectDto> getStudents(PageDto pageDto) {
+    public Page<StudentAssignDto> getStudents(PageDto pageDto) {
         Pageable pageable = PageRequest.of(pageDto.getPage()-1, pageDto.getSize());
         Page<Integer> ids = getStudentIdPages(pageable);
-        List<StuSubjectDto> result = new ArrayList<>();
+        List<StudentAssignDto> result = new ArrayList<>();
         for (int id : ids) {
             Optional<Student> student = studentDao.findById(id);
             if (student.isPresent()) {
                 List<Integer> subjectIds = stuSubjectDao.getNullTeacherSubjectIdsByStudentId(id);
                 List<String> subjects = subjectDao.getSubjectNamesByIds(subjectIds);
                 for (String subject : subjects) {
-                    StuSubjectDto stuSubjectDto = new StuSubjectDto();
-                    stuSubjectDto.setGrade(student.get().getGrade());
-                    stuSubjectDto.setName(student.get().getName());
-                    stuSubjectDto.setSubject(subject);
-                    result.add(stuSubjectDto);
+                    StudentAssignDto studentAssignDto = new StudentAssignDto();
+                    studentAssignDto.setGrade(student.get().getGrade());
+                    studentAssignDto.setName(student.get().getName());
+                    studentAssignDto.setSubject(subject);
+                    studentAssignDto.setStudentId(id);
+                    result.add(studentAssignDto);
                 }
             }
         }
-        return result;
+        return new PageImpl<>(result, pageable, ids.getTotalElements());
     }
 
     /**
@@ -112,8 +131,9 @@ public class AdminServiceImpl implements AdminService {
      * @return 科目信息列表
      */
     @Override
-    public List<Subject> getSubjectInfo() {
-        return subjectDao.findAllSubjects();
+    public Page<Subject> getSubjectInfo(PageDto pageDto) {
+        Pageable pageable = PageRequest.of(pageDto.getPage()-1, pageDto.getSize());
+        return subjectDao.findAllSubjectPages(pageable);
     }
 
     /**
@@ -123,7 +143,7 @@ public class AdminServiceImpl implements AdminService {
      */
     @Override
     public String updatePrice(PriceDto priceDto) {
-        int id = subjectDao.getIdBySubjectName(priceDto.getName());
+        int id = priceDto.getId();
         subjectDao.updatePriceById(id, priceDto.getPrice());
         return "更新成功价格为" + priceDto.getPrice();
     }
@@ -137,7 +157,7 @@ public class AdminServiceImpl implements AdminService {
     public String assignTeacher(AssignTeacherDto assignTeacherDto) {
         int studentId = assignTeacherDto.getStudentId();
         int teacherId = assignTeacherDto.getTeacherId();
-        int subjectId = assignTeacherDto.getSubjectId();
+        int subjectId = subjectDao.getIdBySubjectName(assignTeacherDto.getSubject());
         stuSubjectDao.updateTeacherIdByStudentIdAndSubjectId(studentId, teacherId, subjectId);
         return "分配成功";
     }

@@ -48,13 +48,13 @@ public interface AdminService {
      * @param pageDto 包含学生状态的 DTO 对象
      * @return 学生信息列表
      */
-    List<StuSubjectDto> getStudents(@Valid PageDto pageDto);
+    Page<StudentAssignDto> getStudents(@Valid PageDto pageDto);
 
     /**
      * 获取所有科目信息
      * @return 科目信息列表
      */
-    List<Subject> getSubjectInfo();
+    Page<Subject> getSubjectInfo(PageDto pageDto);
 
     /**
      * 更新科目价格
@@ -75,4 +75,6 @@ public interface AdminService {
     void autoAssign(int tableId);
 
     Page<Integer> getStudentIdPages(Pageable pageable);
+
+    List<TeacherInfoDto> getTeacherBySubjectAndGrade(@Valid SubjectAndGradeDto subjectAndGradeDto);
 }
