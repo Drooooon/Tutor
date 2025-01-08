@@ -102,4 +102,10 @@ public class AdminController {
         String message = adminService.updatePrice(priceDto);
         return ResponseMessage.success(message);
     }
+
+    @PostMapping("fastAssign")
+    public ResponseMessage<String> fastAssign() {
+        adminService.fastAssign();
+        return ResponseMessage.success("分配完成");
+    }
 }

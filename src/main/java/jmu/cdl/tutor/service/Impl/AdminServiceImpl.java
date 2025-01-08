@@ -1,10 +1,8 @@
 package jmu.cdl.tutor.service.Impl;
 
-import jmu.cdl.tutor.dao.StuSubjectDao;
-import jmu.cdl.tutor.dao.StudentDao;
-import jmu.cdl.tutor.dao.SubjectDao;
-import jmu.cdl.tutor.dao.TeacherDao;
+import jmu.cdl.tutor.dao.*;
 import jmu.cdl.tutor.pojo.DTO.*;
+import jmu.cdl.tutor.pojo.StuSubject;
 import jmu.cdl.tutor.pojo.Student;
 import jmu.cdl.tutor.pojo.Subject;
 import jmu.cdl.tutor.pojo.Teacher;
@@ -31,6 +29,9 @@ public class AdminServiceImpl implements AdminService {
 
     @Autowired
     private SubjectDao subjectDao;
+
+    @Autowired
+    private TeachInfoDao teachInfoDao;
 
     /**
      * 根据教师状态获取教师ID列表
@@ -126,7 +127,25 @@ public class AdminServiceImpl implements AdminService {
     public String assignTeacher(AssignTeacherDto assignTeacherDto) {
         int studentId = assignTeacherDto.getStudentId();
         int teacherId = assignTeacherDto.getTeacherId();
-        stuSubjectDao.updateTeacherIdByStudentId(studentId, teacherId);
+        int subjectId = assignTeacherDto.getSubjectId();
+        stuSubjectDao.updateTeacherIdByStudentIdAndSubjectId(studentId, teacherId, subjectId);
         return "分配成功";
+    }
+
+    @Override
+    public void fastAssign() {
+        List<Integer> tableIds = stuSubjectDao.getTableIdsByTeacherIdNull();
+        for(int tableId:tableIds){
+            autoAssign(tableId);
+        }
+    }
+
+    public void autoAssign(int tableId) {
+        StuSubject stuSubject = stuSubjectDao.findById(tableId).get();
+        String grade = stuSubject.getGrade();
+        int subjectId = stuSubject.getSubjectId();
+        List<Integer> teacherIds = teachInfoDao.getTeacherIdByGradeAndSubjectId(grade, subjectId);
+        int teacherId = stuSubjectDao.getTeacherIdWithMinCount(teacherIds);
+        stuSubjectDao.updateTeacherIdByStudentIdAndSubjectId(stuSubject.getStudentId(), teacherId, subjectId);
     }
 }

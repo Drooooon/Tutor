@@ -1,9 +1,6 @@
 package jmu.cdl.tutor.pojo;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,9 +14,10 @@ public class TeachInfo {
 
     @Id
     @Column(name = "tb_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // 教学信息ID
 
-    @Column(name = "teacher__id")
+    @Column(name = "teacher_id")
     private int teacherId; // 教师ID
 
     @Column(name = "subject_id")
