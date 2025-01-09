@@ -20,10 +20,10 @@ public interface AccountDao extends CrudRepository<Account, Integer> {
      * 
      * @param id 用户ID
      */
-    @Modifying
-    @Transactional
-    @Query("DELETE FROM Account a where a.id = :id")
-    void deleteAccount(int id);
+//    @Modifying
+//    @Transactional
+//    @Query("DELETE FROM Account a where a.id = :id")
+//    void deleteAccount(int id);
 
     /**
      * 根据用户ID获取密码
