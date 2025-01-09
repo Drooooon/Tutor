@@ -4,6 +4,8 @@ import jmu.cdl.tutor.pojo.DTO.ExamDetailDto;
 import jmu.cdl.tutor.pojo.DTO.ExamDto;
 import jmu.cdl.tutor.pojo.DTO.ExamWithDetailsDto;
 import jmu.cdl.tutor.pojo.Teacher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -31,7 +33,7 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
     List<Integer> getIdsByStatus(String status);
 
     @Query("SELECT t FROM Teacher t WHERE t.id IN :ids")
-    List<Teacher> getTeachersByIds(List<Integer> ids);
+    Page<Teacher> getTeachersByIds(List<Integer> ids, Pageable pageable);
 
 
     @Modifying
@@ -41,6 +43,10 @@ public interface TeacherDao extends CrudRepository<Teacher, Integer> {
 
     @Query("SELECT t.status FROM Teacher t WHERE t.id = :id")
     String getStatusById(int id);
+
+
+    @Query("SELECT t.name FROM Teacher t WHERE t.id = :teacherId")
+    String getNameById(int teacherId);
 
 
     // 自定义查询，获取科目对象列表

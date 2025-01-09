@@ -11,6 +11,7 @@ import jmu.cdl.tutor.pojo.Teacher;
 import jmu.cdl.tutor.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,12 +60,19 @@ public class AdminController {
      * @return 学生列表
      */
     @PostMapping("getStudents")
-    public ResponseMessage<List<StuSubjectDto>> getStudents(@Valid @RequestBody PageDto pageDto) {
-        List<StuSubjectDto> results = adminService.getStudents(pageDto);
+    public ResponseMessage<Page<StudentAssignDto>> getStudents(@Valid @RequestBody PageDto pageDto) {
+        Page<StudentAssignDto> results = adminService.getStudents(pageDto);
         if (results.isEmpty()) {
             return ResponseMessage.failed(results);
         }
         return ResponseMessage.success(results);
+    }
+
+
+    @PostMapping("getTeacherBySubjectAndGrade")
+    public ResponseMessage<List<TeacherInfoDto>> getTeacherBySubjectAndGrade(@Valid @RequestBody SubjectAndGradeDto subjectAndGradeDto) {
+        List<TeacherInfoDto> teachers = adminService.getTeacherBySubjectAndGrade(subjectAndGradeDto);
+        return ResponseMessage.success(teachers);
     }
 
     /**
@@ -84,9 +92,9 @@ public class AdminController {
      *
      * @return 科目信息列表
      */
-    @GetMapping("getSubjectInfo")
-    public ResponseMessage<List<Subject>> getSubjectInfo() {
-        List<Subject> subjects = adminService.getSubjectInfo();
+    @PostMapping("getSubjectInfo")
+    public ResponseMessage<Page<Subject>> getSubjectInfo(@Valid @RequestBody PageDto pageDto) {
+        Page<Subject> subjects = adminService.getSubjectInfo(pageDto);
         return ResponseMessage.success(subjects);
     }
 

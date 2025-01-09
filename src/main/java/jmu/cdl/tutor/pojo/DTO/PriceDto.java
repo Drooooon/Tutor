@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class PriceDto {
     @NotNull
-    @JsonProperty("name")
-    String name;
+    @JsonProperty("id")
+    int id;
 
     @NotNull
     @JsonProperty("price")
