@@ -17,7 +17,7 @@ public class TeachInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id; // 教学信息ID
 
-    @Column(name = "teacher__id")
+    @Column(name = "teacher_id")
     private int teacherId; // 教师ID
 
     @Column(name = "subject_id")

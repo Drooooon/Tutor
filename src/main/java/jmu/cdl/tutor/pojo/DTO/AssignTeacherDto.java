@@ -13,4 +13,8 @@ public class AssignTeacherDto {
     @NotNull
     @JsonProperty("teacherId")
     private int teacherId;
+
+    @NotNull
+    @JsonProperty("subjectId")
+    private int subjectId;
 }

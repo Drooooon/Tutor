@@ -65,4 +65,8 @@ public interface AdminService {
      * @return 分配结果信息
      */
     String assignTeacher(@Valid AssignTeacherDto assignTeacherDto);
+
+    void fastAssign();
+
+    void autoAssign(int tableId);
 }

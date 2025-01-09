@@ -17,4 +17,7 @@ public interface TeachInfoDao extends CrudRepository<TeachInfo, Integer> {
      */
     @Query("SELECT t.id FROM TeachInfo t WHERE t.subjectId = :subject AND t.grade = :grade")
     List<Teacher> getTeachersNameBySubjectAndGrade(int subjectId, String grade);
+
+    @Query("SELECT t.teacherId FROM TeachInfo t WHERE t.grade = :grade AND t.subjectId = :subjectId")
+    List<Integer> getTeacherIdByGradeAndSubjectId(String grade, int subjectId);
 }

@@ -6,6 +6,7 @@ import jmu.cdl.tutor.pojo.Teacher;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,5 +60,11 @@ public interface StuSubjectDao extends CrudRepository<StuSubject, Integer> {
     @Transactional
     @Modifying
     @Query("UPDATE StuSubject s SET s.teacherId = :teacherId WHERE s.studentId = :studentId AND s.subjectId = :subjectId")
-    void updateTeacherIdByStudentId(int studentId, int teacherId);
+    void updateTeacherIdByStudentIdAndSubjectId(int studentId, int teacherId, int subjectId);
+
+    @Query("SELECT s.tbId FROM StuSubject s WHERE s.teacherId is null")
+    List<Integer> getTableIdsByTeacherIdNull();
+
+    @Query("SELECT t.teacherId FROM TeachInfo t WHERE t.teacherId IN :teacherIds GROUP BY t.teacherId ORDER BY COUNT(t.teacherId) ASC LIMIT 1")
+    int getTeacherIdWithMinCount(List<Integer> teacherIds);
 }

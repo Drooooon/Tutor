@@ -18,6 +18,8 @@ public class StuSubject {
     private int studentId; // 学生ID
     @Column(name = "subject_id")
     private int subjectId;  // 科目ID
+    @Column(name = "grade")
+    private String grade;   // 年级
     @Column(name = "teacher_id")
-    private int teacherId;     // 对应的教师ID
+    private Integer teacherId;     // 对应的教师ID
 }
