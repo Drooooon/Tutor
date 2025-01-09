@@ -45,6 +45,9 @@ public interface SubjectDao extends CrudRepository<Subject, Integer> {
     @Query("SELECT s.subjectName FROM Subject s WHERE s.subjectId IN :ids")
     List<String> getSubjectNamesByIds(List<Integer> ids);
 
+    @Query("SELECT s.subjectName FROM Subject s WHERE s.subjectId =:id")
+    String getSubjectNameById(Integer id);
+
     @Query("SELECT s FROM Subject s")
     List<Subject> findAllSubjects();
 

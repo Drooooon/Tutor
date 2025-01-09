@@ -1,13 +1,18 @@
 package jmu.cdl.tutor.pojo;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @Table(name = "tb_exams")
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Exams {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +30,7 @@ public class Exams {
     private String grade;          // 年级
 
     @Column(name = "exam_date")
-    private String examDate;    // 考试日期
+    private LocalDateTime examDate;    // 考试日期
 
     @Column(name = "average_score")
     private float averageScore; // 平均分
